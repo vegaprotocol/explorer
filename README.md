@@ -1,6 +1,6 @@
 # Vega Block Explorer
 
-> :warning: This repo is a hacky Vega block explorer. The API is useful, though.
+> :warning: This repo is not seeing active development. A better block explorer will follow. The API is useful, though.
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/4fff1f7f-315e-46dd-b821-2ddae569ebbc/deploy-status)](https://explorer.vega.trading)
 
