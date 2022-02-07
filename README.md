@@ -35,7 +35,7 @@ curl 'https://explorer.vega.trading/.netlify/functions/chain-explorer-api' \
 ```
 
 # Site
-The web-frontend is a (bad) [Sveltekit](https://sapper.svelte.dev) project. Don't look to it for a good example of how to use [Svelte](https://svelte.dev/), or sapper. More information is available in [the README](./site/README.md).
+The web-frontend is a (bad) [Sapper](https://sapper.svelte.dev) project. Don't look to it for a good example of how to use [Svelte](https://svelte.dev/), or sapper. More information is available in [the README](./site/README.md).
 
 # Deployment
 Both the Go service & site are deployed to Netlify on build. Check out the Makefile to see what is involved there.
