@@ -4,7 +4,6 @@ import (
 	// "bytes"
 	//  "compress/gzip"
 
-	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
 	_ "encoding/json"
@@ -21,6 +20,7 @@ import (
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/golang/protobuf/jsonpb"
 	"github.com/golang/protobuf/proto"
+	"github.com/tendermint/tendermint/crypto/tmhash"
 )
 
 type UnsignedTx struct {
@@ -93,9 +93,8 @@ func unpackSignedTx(rawtx []byte) (interface{}, error) {
 		return nil, err
 	}
 
-	hasher := sha256.New()
-	hasher.Write(rawtx)
-    hash := hex.EncodeToString(hasher.Sum(nil))
+    hash := tmhash.Sum(rawtx)
+    str := hex.EncodeToString(hash)
 	
 	inputData := commandspb.InputData{}
 	err = proto.Unmarshal(tx.InputData, &inputData)
@@ -120,7 +119,7 @@ func unpackSignedTx(rawtx []byte) (interface{}, error) {
 		Sig:     tx.Signature.Value,
 		PubKey:  "0x" + tx.GetPubKey(),
 		Nonce:   inputData.Nonce,
-		TxHash:  hash,
+		TxHash:  str,
 	}, nil
 }
 
