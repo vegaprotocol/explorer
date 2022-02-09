@@ -1,6 +1,8 @@
 <script>
   let message = "Experimental search. Enter an ID above.";
+  let message2 = "";
   let link = "";
+  let link2 = "";
 
   function detect(e) {
     const i = e.target.value.toLowerCase();
@@ -8,6 +10,8 @@
     if (i.substr(0, 2) === "0x") {
       message = "This looks like a party id 🎉";
       link = `/party/${i}`;
+      message2 = "Or a transaction id 🤔";
+      link2 = `/transaction/${i}`;
     } else if (i.indexOf("-") !== -1 && i.toLowerCase()[0] === "v") {
       const split = i.split("-");
       const block = Number(split[0].substr(1)).toString();
@@ -52,6 +56,11 @@
   {message}
   {#if link}
     <a href={link}>Go!</a>
+  {/if}
+  <br />
+  {#if link2}
+    {message2}
+    <a href={link2}>Go!</a>
   {/if}
 </p>
 

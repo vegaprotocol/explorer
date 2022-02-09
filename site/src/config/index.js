@@ -1,6 +1,11 @@
 // URL for the deployment of the Go API in /api/
-const blockExplorerBaseUrl = 'https://explorer.vega.trading/.netlify/functions/chain-explorer-api'
+const blockExplorerBaseUrl =
+  "https://explorer.vega.trading/.netlify/functions/chain-explorer-api";
 const networkConfigs = {
+  devnet: {
+    tendermintBaseUrl: `https://n04.d.vega.xyz/tm/`,
+    apiBaseUrl: `https://n04.d.vega.xyz/`,
+  },
   testnet: {
     tendermintBaseUrl: `https://lb.testnet.vega.xyz/tm/`,
     apiBaseUrl: `https://lb.testnet.vega.xyz/`,
