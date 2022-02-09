@@ -86,8 +86,8 @@
     <hr />
   {/if}
   {#if data}
-    {#each data as { Type, PubKey, Command }, i}
-      <Transaction tx={Command} pubKey={PubKey} type={Type} />
+    {#each data as { Type, PubKey, Command, TxHash }, i}
+      <Transaction hash={TxHash} tx={Command} pubKey={PubKey} type={Type} />
     {/each}
   {/if}
 </ul>
