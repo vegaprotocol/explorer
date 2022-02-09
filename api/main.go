@@ -94,7 +94,7 @@ func unpackSignedTx(rawtx []byte) (interface{}, error) {
 	}
 
     hash := tmhash.Sum(rawtx)
-    str := hex.EncodeToString(hash)
+    hashString := "0x" + strings.ToUpper(hex.EncodeToString(hash)) 
 	
 	inputData := commandspb.InputData{}
 	err = proto.Unmarshal(tx.InputData, &inputData)
@@ -119,7 +119,7 @@ func unpackSignedTx(rawtx []byte) (interface{}, error) {
 		Sig:     tx.Signature.Value,
 		PubKey:  "0x" + tx.GetPubKey(),
 		Nonce:   inputData.Nonce,
-		TxHash:  str,
+		TxHash:  hashString,
 	}, nil
 }
 
