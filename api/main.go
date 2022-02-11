@@ -167,7 +167,7 @@ func handler(ev events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse,
 		return nil, errors.New("node_url is required")
 	}
 
-	if req.BlockHeight == nil && len(req.TxHash) <= 0 {
+	if req.BlockHeight == nil && req.TxHash == nil {
 		return nil, errors.New("block_height or tx_hash is required")
 	}
 
