@@ -130,7 +130,7 @@ func unpack(tx []byte) (interface{}, error) {
 type request struct {
 	NodeURL     string  `json:"node_url"`
 	BlockHeight *uint64 `json:"block_height"`
-	TxHash      string  `json:"tx_hash"`
+	TxHash      *string  `json:"tx_hash"`
 }
 
 func handler(ev events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse, error) {
@@ -167,13 +167,22 @@ func handler(ev events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse,
 		return nil, errors.New("node_url is required")
 	}
 
-	if req.BlockHeight == nil && len(req.TxHash) <= 0 {
-		return nil, errors.New("block_height or tx_hash is required")
+	if req.BlockHeight == nil && req.TxHash == nil {
+		return nil, errors.New("one of block_height or tx_hash is required")
+	} else if req.BlockHeight != nil && req.TxHash != nil {
+		return nil, errors.New("only one of block_height or tx_hash is required")
 	}
 
 	var out interface{}
 	if req.BlockHeight != nil {
 		out, err = getTxsAtBlockHeight(req.NodeURL, *req.BlockHeight)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	if req.TxHash != nil {
+		out, err = getTx(req.NodeURL, *req.TxHash)
 		if err != nil {
 			return nil, err
 		}
