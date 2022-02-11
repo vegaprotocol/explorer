@@ -54,9 +54,7 @@ func getTx(nodeAddress string, hash string) (interface{}, error) {
 		return nil, err
 	}
 
-	var out []interface{}
-	tx, err := unpack(txResp.Result.Tx)
-	out = append(out, tx)
+	out, err := unpack(txResp.Result.Tx)
 
 	return out, nil
 }
