@@ -12,11 +12,16 @@ const (
 	pathTx = "/tx"
 )
 
-type TxResponse struct {
+
+type TxResult struct {
 	Hash []byte `json:"hash"`
 	Height string `json:"height"`
 	Index int `json:"index"`
 	Tx []byte `json:"tx"`
+}
+
+type TxResponse struct {
+	Result TxResult `json:"result"`
 }
 
 func getTx(nodeAddress string, hash string) (interface{}, error) {
@@ -28,8 +33,7 @@ func getTx(nodeAddress string, hash string) (interface{}, error) {
 	values := req.URL.Query()
 	values.Add("hash", fmt.Sprintf("%v", hash))
 	req.URL.RawQuery = values.Encode()
-	req.URL.Path = path.Join(req.URL.Path, pathBlock)
-
+	req.URL.Path = path.Join(req.URL.Path, pathTx)
 	// build client
 	client := &http.Client{}
 	resp, err := client.Do(req)
@@ -51,7 +55,7 @@ func getTx(nodeAddress string, hash string) (interface{}, error) {
 	}
 
 	var out []interface{}
-	tx, err := unpack(txResp.Tx)
+	tx, err := unpack(txResp.Result.Tx)
 	out = append(out, tx)
 
 	return out, nil
