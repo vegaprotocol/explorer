@@ -168,7 +168,9 @@ func handler(ev events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse,
 	}
 
 	if req.BlockHeight == nil && req.TxHash == nil {
-		return nil, errors.New("block_height or tx_hash is required")
+		return nil, errors.New("one of block_height or tx_hash is required")
+	} else if req.BlockHeight != nil && req.TxHash != nil {
+		return nil, errors.New("only one of block_height or tx_hash is required")
 	}
 
 	var out interface{}
