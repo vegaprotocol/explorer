@@ -1,5 +1,3 @@
 # Vega Block Explorer
 
-> :warning: This repo is not seeing active development. 
-
-See: https://github.com/vegaprotocol/frontend-monorepo/tree/master/apps/explorer 
+> :warning: Retired. See: [vegaprotocol/frontend-monorepo](https://github.com/vegaprotocol/frontend-monorepo/tree/master/apps/explorer)
