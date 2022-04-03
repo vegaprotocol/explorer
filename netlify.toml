@@ -6,6 +6,6 @@
   GO_IMPORT_PATH = "github.com/jeremyletang/chain-explorer-api"
   GO111MODULE = "on"
 [[redirects]]
-  from = "/*"
+  from = "/"
   to = "https://explorer.fairground.wtf"
   status = 301
