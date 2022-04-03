@@ -57,8 +57,6 @@ func getCommand(inputData *commandspb.InputData) (protoiface.MessageV1, string, 
 		return cmd.LiquidityProvisionAmendment, "LiquidityProvisionAmendment", nil
 	case *commandspb.InputData_ProposalSubmission:
 		return cmd.ProposalSubmission, "ProposalSubmission", nil
-	case *commandspb.InputData_NodeRegistration:
-		return cmd.NodeRegistration, "NodeRegistration", nil
 	case *commandspb.InputData_NodeVote:
 		return cmd.NodeVote, "NodeVote", nil
 	case *commandspb.InputData_NodeSignature:
