@@ -1,8 +1,5 @@
 build: go
-	cd site/ && \
-	npm install && \
-	npm run export
-
+	echo "Site removed"
 go:
 	mkdir -p functions
 	cd api && \
