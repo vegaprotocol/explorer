@@ -79,6 +79,10 @@ func getCommand(inputData *commandspb.InputData) (protoiface.MessageV1, string, 
 		return cmd.Transfer, "Transfer", nil
 	case *commandspb.InputData_CancelTransfer:
 		return cmd.CancelTransfer, "CancelTransfer", nil
+	case *commandspb.InputData_ValidatorHeartbeat:
+		return cmd.ValidatorHeartbeat, "ValidatorHeartbeat", nil
+	case *commandspb.InputData_EthereumKeyRotateSubmission:
+		return cmd.EthereumKeyRotateSubmission, "EthereumKeyRotateSubission", nil
 	default:
 		return nil, "", errors.New("unsupported command")
 	}
@@ -91,9 +95,9 @@ func unpackSignedTx(rawtx []byte) (interface{}, error) {
 		return nil, err
 	}
 
-    hash := tmhash.Sum(rawtx)
-    hashString := "0x" + strings.ToUpper(hex.EncodeToString(hash)) 
-	
+	hash := tmhash.Sum(rawtx)
+	hashString := "0x" + strings.ToUpper(hex.EncodeToString(hash))
+
 	inputData := commandspb.InputData{}
 	err = proto.Unmarshal(tx.InputData, &inputData)
 	if err != nil {
@@ -128,7 +132,7 @@ func unpack(tx []byte) (interface{}, error) {
 type request struct {
 	NodeURL     string  `json:"node_url"`
 	BlockHeight *uint64 `json:"block_height"`
-	TxHash      *string  `json:"tx_hash"`
+	TxHash      *string `json:"tx_hash"`
 }
 
 func handler(ev events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse, error) {
