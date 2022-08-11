@@ -1,9 +1,6 @@
 package main
 
 import (
-	// "bytes"
-	//  "compress/gzip"
-
 	"encoding/hex"
 	"encoding/json"
 	_ "encoding/json"
@@ -13,14 +10,14 @@ import (
 	"strconv"
 	"strings"
 
-	commandspb "code.vegaprotocol.io/protos/vega/commands/v1"
-	"google.golang.org/protobuf/runtime/protoiface"
+	commandspb "code.vegaprotocol.io/vega/protos/vega/commands/v1"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/golang/protobuf/jsonpb"
 	"github.com/golang/protobuf/proto"
 	"github.com/tendermint/tendermint/crypto/tmhash"
+	"google.golang.org/protobuf/runtime/protoiface"
 )
 
 type UnsignedTx struct {
@@ -45,44 +42,46 @@ func getCommand(inputData *commandspb.InputData) (protoiface.MessageV1, string, 
 		return cmd.OrderCancellation, "OrderCancellation", nil
 	case *commandspb.InputData_OrderAmendment:
 		return cmd.OrderAmendment, "OrderAmendment", nil
-	case *commandspb.InputData_VoteSubmission:
-		return cmd.VoteSubmission, "VoteSubmission", nil
 	case *commandspb.InputData_WithdrawSubmission:
 		return cmd.WithdrawSubmission, "WithdrawSubmission", nil
+	case *commandspb.InputData_VoteSubmission:
+		return cmd.VoteSubmission, "VoteSubmission", nil
+	case *commandspb.InputData_ProposalSubmission:
+		return cmd.ProposalSubmission, "ProposalSubmission", nil
 	case *commandspb.InputData_LiquidityProvisionSubmission:
 		return cmd.LiquidityProvisionSubmission, "LiquidityProvisionSubmission", nil
+	case *commandspb.InputData_DelegateSubmission:
+		return cmd.DelegateSubmission, "DelegateSubmission", nil
+	case *commandspb.InputData_UndelegateSubmission:
+		return cmd.UndelegateSubmission, "UndelegateSubmission", nil
 	case *commandspb.InputData_LiquidityProvisionCancellation:
 		return cmd.LiquidityProvisionCancellation, "LiquidityProvisionCancellation", nil
 	case *commandspb.InputData_LiquidityProvisionAmendment:
 		return cmd.LiquidityProvisionAmendment, "LiquidityProvisionAmendment", nil
-	case *commandspb.InputData_ProposalSubmission:
-		return cmd.ProposalSubmission, "ProposalSubmission", nil
+	case *commandspb.InputData_Transfer:
+		return cmd.Transfer, "Transfer", nil
+	case *commandspb.InputData_CancelTransfer:
+		return cmd.CancelTransfer, "CancelTransfer", nil
+	case *commandspb.InputData_AnnounceNode:
+		return cmd.AnnounceNode, "AnnounceNode", nil
 	case *commandspb.InputData_NodeVote:
 		return cmd.NodeVote, "NodeVote", nil
 	case *commandspb.InputData_NodeSignature:
 		return cmd.NodeSignature, "NodeSignature", nil
 	case *commandspb.InputData_ChainEvent:
 		return cmd.ChainEvent, "ChainEvent", nil
-	case *commandspb.InputData_OracleDataSubmission:
-		return cmd.OracleDataSubmission, "OracleDataSubmission", nil
-	case *commandspb.InputData_DelegateSubmission:
-		return cmd.DelegateSubmission, "DelegateSubmission", nil
-	case *commandspb.InputData_UndelegateSubmission:
-		return cmd.UndelegateSubmission, "UndelegateSubmission", nil
-	case *commandspb.InputData_RestoreSnapshotSubmission:
-		return cmd.RestoreSnapshotSubmission, "RestoreSnapshotSubmission", nil
 	case *commandspb.InputData_KeyRotateSubmission:
 		return cmd.KeyRotateSubmission, "KeyRotateSubmission", nil
 	case *commandspb.InputData_StateVariableProposal:
 		return cmd.StateVariableProposal, "StateVariableProposal", nil
-	case *commandspb.InputData_Transfer:
-		return cmd.Transfer, "Transfer", nil
-	case *commandspb.InputData_CancelTransfer:
-		return cmd.CancelTransfer, "CancelTransfer", nil
 	case *commandspb.InputData_ValidatorHeartbeat:
 		return cmd.ValidatorHeartbeat, "ValidatorHeartbeat", nil
 	case *commandspb.InputData_EthereumKeyRotateSubmission:
 		return cmd.EthereumKeyRotateSubmission, "EthereumKeyRotateSubission", nil
+	case *commandspb.InputData_ProtocolUpdateProposal:
+		return cmd.ProtocolUpgradeProposal, "ProtocolUpdgradeProposal", nil
+	case *commandspb.InputData_OracleDataSubmission:
+		return cmd.OracleDataSubmission, "OracleDataSubmission", nil
 	default:
 		return nil, "", errors.New("unsupported command")
 	}
