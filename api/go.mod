@@ -1,6 +1,6 @@
 module code.vegaprotocol.io/chain-explorer-api
 
-go 1.12
+go 1.18
 
 require (
 	code.vegaprotocol.io/vega v0.53.1-0.20220811152005-63be4c48ffea
