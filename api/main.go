@@ -78,7 +78,7 @@ func getCommand(inputData *commandspb.InputData) (protoiface.MessageV1, string, 
 		return cmd.ValidatorHeartbeat, "ValidatorHeartbeat", nil
 	case *commandspb.InputData_EthereumKeyRotateSubmission:
 		return cmd.EthereumKeyRotateSubmission, "EthereumKeyRotateSubission", nil
-	case *commandspb.InputData_ProtocolUpdateProposal:
+	case *commandspb.InputData_ProtocolUpgradeProposal:
 		return cmd.ProtocolUpgradeProposal, "ProtocolUpdgradeProposal", nil
 	case *commandspb.InputData_OracleDataSubmission:
 		return cmd.OracleDataSubmission, "OracleDataSubmission", nil
