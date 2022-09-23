@@ -82,6 +82,10 @@ func getCommand(inputData *commandspb.InputData) (protoiface.MessageV1, string, 
 		return cmd.ProtocolUpgradeProposal, "ProtocolUpdgradeProposal", nil
 	case *commandspb.InputData_OracleDataSubmission:
 		return cmd.OracleDataSubmission, "OracleDataSubmission", nil
+	case *commandspb.InputData_IssueSignatures:
+		return cmd.IssueSignatures, "IssueSignatures", nil
+	case *commandspb.InputData_BatchMarketInstructions:
+		return cmd.BatchMarketInstructions, "BatchMarketInstructions", nil
 	default:
 		return nil, "", errors.New("unsupported command")
 	}
