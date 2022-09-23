@@ -1,10 +1,12 @@
 package main
 
 import (
+	"bytes"
 	"encoding/hex"
 	"encoding/json"
 	_ "encoding/json"
 	"errors"
+	"fmt"
 	_ "fmt"
 	_ "net/http"
 	"strconv"
@@ -91,7 +93,7 @@ func getCommand(inputData *commandspb.InputData) (protoiface.MessageV1, string, 
 	}
 }
 
-func unpackSignedTx(rawtx []byte) (interface{}, error) {
+func unpackSignedTx(rawtx []byte, chainID string) (interface{}, error) {
 	tx := commandspb.Transaction{}
 	err := proto.Unmarshal(rawtx, &tx)
 	if err != nil {
@@ -102,11 +104,9 @@ func unpackSignedTx(rawtx []byte) (interface{}, error) {
 	hashString := "0x" + strings.ToUpper(hex.EncodeToString(hash))
 
 	input := tx.InputData
-	for i, v := range tx.InputData {
-		if v == '\000' {
-			input = tx.InputData[i+1:]
-			break
-		}
+	chainIDAnDelim := []byte(fmt.Sprintf("%s%c", chainID, '\000'))
+	if bytes.HasPrefix(tx.InputData, chainIDAnDelim) {
+		input = input[len(chainIDAnDelim):]
 	}
 
 	inputData := commandspb.InputData{}
@@ -136,8 +136,8 @@ func unpackSignedTx(rawtx []byte) (interface{}, error) {
 	}, nil
 }
 
-func unpack(tx []byte) (interface{}, error) {
-	return unpackSignedTx(tx)
+func unpack(tx []byte, chainID string) (interface{}, error) {
+	return unpackSignedTx(tx, chainID)
 }
 
 type request struct {
@@ -186,16 +186,21 @@ func handler(ev events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse,
 		return nil, errors.New("only one of block_height or tx_hash is required")
 	}
 
+	chainID, err := getChainID(req.NodeURL)
+	if err != nil {
+		return nil, err
+	}
+
 	var out interface{}
 	if req.BlockHeight != nil {
-		out, err = getTxsAtBlockHeight(req.NodeURL, *req.BlockHeight)
+		out, err = getTxsAtBlockHeight(req.NodeURL, *req.BlockHeight, chainID)
 		if err != nil {
 			return nil, err
 		}
 	}
 
 	if req.TxHash != nil {
-		out, err = getTx(req.NodeURL, *req.TxHash)
+		out, err = getTx(req.NodeURL, *req.TxHash, chainID)
 		if err != nil {
 			return nil, err
 		}

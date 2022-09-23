@@ -12,19 +12,18 @@ const (
 	pathTx = "/tx"
 )
 
-
 type TxResult struct {
-	Hash []byte `json:"hash"`
+	Hash   []byte `json:"hash"`
 	Height string `json:"height"`
-	Index int `json:"index"`
-	Tx []byte `json:"tx"`
+	Index  int    `json:"index"`
+	Tx     []byte `json:"tx"`
 }
 
 type TxResponse struct {
 	Result TxResult `json:"result"`
 }
 
-func getTx(nodeAddress string, hash string) (interface{}, error) {
+func getTx(nodeAddress string, hash string, chainID string) (interface{}, error) {
 	// prepare the request
 	req, err := http.NewRequest("GET", nodeAddress, nil)
 	if err != nil {
@@ -54,7 +53,7 @@ func getTx(nodeAddress string, hash string) (interface{}, error) {
 		return nil, err
 	}
 
-	out, err := unpack(txResp.Result.Tx)
+	out, err := unpack(txResp.Result.Tx, chainID)
 
 	return out, nil
 }
