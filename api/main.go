@@ -101,16 +101,16 @@ func unpackSignedTx(rawtx []byte) (interface{}, error) {
 	hash := tmhash.Sum(rawtx)
 	hashString := "0x" + strings.ToUpper(hex.EncodeToString(hash))
 
-	var idx int
+	input := tx.InputData
 	for i, v := range tx.InputData {
 		if v == '\000' {
-			idx = i
+			input = tx.InputData[i+1:]
 			break
 		}
 	}
 
 	inputData := commandspb.InputData{}
-	err = proto.Unmarshal(tx.InputData[idx+1:], &inputData)
+	err = proto.Unmarshal(input, &inputData)
 	if err != nil {
 		return nil, err
 	}
