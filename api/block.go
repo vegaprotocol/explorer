@@ -29,7 +29,7 @@ type BlockResponse struct {
 	Result Result `json:"result"`
 }
 
-func getTxsAtBlockHeight(nodeAddress string, height uint64, chainID string) (interface{}, error) {
+func getTxsAtBlockHeight(nodeAddress string, height uint64) (interface{}, error) {
 	// prepare the request
 	req, err := http.NewRequest("GET", nodeAddress, nil)
 	if err != nil {
@@ -62,7 +62,7 @@ func getTxsAtBlockHeight(nodeAddress string, height uint64, chainID string) (int
 
 	var out []interface{}
 	for _, v := range blockResp.Result.Block.Data.Txs {
-		tx, err := unpack(v, chainID)
+		tx, err := unpack(v)
 		if err != nil {
 			return nil, err
 		}
